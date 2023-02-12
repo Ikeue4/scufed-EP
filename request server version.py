@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 
+createfile = input("this code needs to make two files on your computer one to hold passwords and profiles and one to save quizes that people uplaod this server can only be seen by you computer and no other computer is uses local host are you ok with this Y/N...")
+
 app = Flask(__name__)
 
 
@@ -105,6 +107,16 @@ def send_data_C():
         file.writelines(new_lines)
 
     return "Data received and written to file", 200
+
+@app.route("/send_data_new_quiz", methods=["POST"])
+def send_data_Q():
+    data_new_Q = request.get_json()
+    formatted_string = "{}: {}".format(data_new_Q['name'], data_new_Q['code'])
+    filename = "quiz.txt"
+    print (formatted_string)
+    with open(filename, "a") as f:
+        f.write('\n' + formatted_string)
+    return "succses", 200
 
 if __name__ == "__main__":
     app.run()
