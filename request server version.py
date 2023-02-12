@@ -118,5 +118,14 @@ def send_data_Q():
         f.write('\n' + formatted_string)
     return "succses", 200
 
+@app.route("/send_data_ask_quiz", methods=["GET"])
+def send_data_AQ():
+    filename = "quiz.txt"
+    with open(filename, "r") as file:
+        content = file.read()
+    parts = content.split("^")
+    return " ".join(parts)
+
+
 if __name__ == "__main__":
     app.run()
