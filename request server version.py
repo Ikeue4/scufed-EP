@@ -82,8 +82,10 @@ def send_data_L():
             if search_string in line:
                 parts = line.split(";")
                 value = parts[-1].strip()
-                print(value)
-                return value
+                parts = value.split("^")
+                value1 = parts[0].strip()                
+                print(value1)
+                return value1
     return "Not Found"
 
 @app.route("/send_data_new_class", methods=["POST"])
@@ -113,19 +115,55 @@ def send_data_Q():
     data_new_Q = request.get_json()
     formatted_string = "{}: {}".format(data_new_Q['name'], data_new_Q['code'])
     filename = "quiz.txt"
-    print (formatted_string)
+    print (formatted_string + '|')
     with open(filename, "a") as f:
-        f.write('\n' + formatted_string)
+        f.write('\n' + formatted_string + '\n|')
     return "succses", 200
 
 @app.route("/send_data_ask_quiz", methods=["GET"])
 def send_data_AQ():
     filename = "quiz.txt"
+    search_string = ("^")
+    values = []
     with open(filename, "r") as file:
-        content = file.read()
-    parts = content.split("^")
-    return " ".join(parts)
+        for line in file:
+            if search_string in line:
+                parts = line.split("^")
+                value = parts[0].strip()
+                values.append(value)
+    if values:
+        return values
+    else:
+        return "error"
 
+@app.route("/send_data_quiz", methods=["POST"])
+def send_data_WQ():
+    data_new_WQ = request.get_json()
+    formatted_string = "{}".format(data_new_WQ.get("quiz", "not found"))
+    formatted_string = (formatted_string + ("^:"))
+    print (formatted_string)
+    filename = "quiz.txt"
+
+    text = []
+    with open(filename, "r") as file:
+        for line in file:
+            text.append(line)
+
+    start_index = -1
+    end_index = -1
+    sendback_lines = []
+    for line in text:
+        if formatted_string in line:
+            start_index = text.index(line)
+        if "|" in line:
+            end_index = text.index(line)
+            if start_index != -1:
+                for i in range(start_index + 1, end_index):
+                    sendback_lines.append(text[i])
+
+                start_index = -1
+                sendback = '\n'.join(sendback_lines)
+    return sendback, 200
 
 if __name__ == "__main__":
     app.run()

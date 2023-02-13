@@ -4,6 +4,18 @@ import ast
 name = ("joe")
 password = ("1234")
 
+lev0 = ("[░░░░░░░░░░]")
+lev1 = ("[█░░░░░░░░░]")
+lev2 = ("[██░░░░░░░░]")
+lev3 = ("[███░░░░░░░]")
+lev4 = ("[████░░░░░░]")
+lev5 = ("[█████░░░░░]")
+lev6 = ("[██████░░░░]")
+lev7 = ("[███████░░░]")
+lev8 = ("[████████░░]")
+lev9 = ("[█████████░]")
+lev10 = ("[██████████]")
+
 while True:
     WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nmake quiz\ndownload/play quiz  ")
     if WhatToDo == ("profile"):
@@ -13,8 +25,29 @@ while True:
         }
         response = requests.post("http://localhost:5000/send_data_level", json=data_N)
         level = response.text
-        print (response.text)
-        print ("-------------------------------\nPROFILE\n-------------------------------\n""name: " + name, "password " + password, "level " + level + "\n")
+        levelprogres = lev0
+        if response.text == "1":
+            levelprogres = lev1
+        elif response.text == "2":
+            levelprogres = lev2
+        elif response.text == "3":
+            levelprogres = lev3
+        elif response.text == "4":
+            levelprogres = lev4
+        elif response.text == "5":
+            levelprogres = lev5
+        elif response.text == "6":
+            levelprogres = lev6
+        elif response.text == "7":
+            levelprogres = lev7
+        elif response.text == "8":
+            levelprogres = lev8
+        elif response.text == "9":
+            levelprogres = lev9
+        else:
+            levelprogres = lev10
+
+        print ("-------------------------------\nPROFILE\n-------------------------------\n""name: " + name, "password " + password, "level " + level + " progres to goal(level 10)" + levelprogres + "\n")
     
     elif WhatToDo == ("join class"):
         newclass = input ("what is your class code ")
@@ -49,7 +82,7 @@ while True:
             runcode = input ("would you like to run this code?Y/N...")
         
         else:
-            runcode = input ("would you like to run this code(the code will be run inside with ast or Abstract Syntax Trees witch provides a way to parse and analyze Python code in a more controlled and secure manner?Y/N...")
+            runcode = input ("would you like to run this code(the code will be run inside with ast or Abstract Syntax Trees witch provides a way to parse and analyze Python code in a more controlled and secure manner)?Y/N...")
 
         if runcode == ("Y"):
             code = output
@@ -64,7 +97,7 @@ while True:
 
         if wanttoupload == ("Y"):
             data_Q = {
-                "name": "^" + whatisthename,
+                "name":"#" + whatisthename + "^",
                 "code": output
             }            
             response = requests.post("http://localhost:5000/send_data_new_quiz", json=data_Q)
@@ -72,4 +105,17 @@ while True:
     elif WhatToDo == ("download/play quiz"):
         response = requests.get("http://localhost:5000/send_data_ask_quiz")
         contents = response.text
-        print(contents)
+        print('\nplease one of the names below (includ the # but not the " and other stuff\n-------------------------------\n' + contents + '-------------------------------')
+        whatquiz = input()
+        data_WQ = {
+            "quiz":whatquiz
+        } 
+        response = requests.post("http://localhost:5000/send_data_quiz", json=data_WQ)
+        contents_quiz = response.text
+        loadedquiz = contents_quiz
+        print(loadedquiz)
+        runcode = input ("would you like to run this quiz in AST?Y/N...")
+        if runcode == ("Y"):
+            code = loadedquiz
+            parsed = ast.parse(code)
+            exec(compile(parsed, "<string>", "exec"))
