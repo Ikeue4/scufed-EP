@@ -73,12 +73,12 @@ while True:
         for i in range(questionamount):
             question = input("what is the question?...")
             answer = input("what is the answer to this question?...")
-            outputadd = ('question_1 = "' + question + '"\nanswer_1 = "' + answer + '"\nprint(question_1)\nuser_answer_1 = input("Your answer: ")\nif user_answer_1 == answer_1:\n    print("Correct!")\nelse:\n    print("Incorrect. The correct answer is", answer_1)')
+            outputadd = ('score = 0\nquestion_1 = "' + question + '"\nanswer_1 = "' + answer + '"\nprint(question_1)\nuser_answer_1 = input("Your answer: ")\nif user_answer_1 == answer_1:\n    print("Correct!")\nelse:\n    score += 1\n    print("Incorrect. The correct answer is", answer_1)\ndata_S = {\n            "name": name,\n            "password": password,\n            "score": str(score)\n        }\nprint (data_S)\nresponse = requests.post("http://localhost:5000/send_data_score", json=data_S)\nprint ("score " + str(score))')
             output = (str(output) + "\n" + str(outputadd))
 
         wantstoseethecode = input("do you want to see the code?Y/N...")
         if wantstoseethecode == ("Y"):
-            print("start of code-------------------------------\n" + output + ("\n\n-------------------------------\nend of code\n"))
+            print("start of code\n-------------------------------\n" + output + ("\n\n-------------------------------\nend of code\n"))
             runcode = input ("would you like to run this code?Y/N...")
         
         else:
@@ -119,3 +119,27 @@ while True:
             code = loadedquiz
             parsed = ast.parse(code)
             exec(compile(parsed, "<string>", "exec"))
+
+name = "joe"
+password = "1234"
+whatquiz = "1+1"
+
+score = 0
+question_1 = "1+1"
+answer_1 = "2"
+print(question_1)
+user_answer_1 = input("Your answer: ")
+if user_answer_1 == answer_1:
+    print("Correct!")
+    score += 1
+else:
+    print("Incorrect. The correct answer is", answer_1)
+data_S = {
+            "name": name,
+            "password": password,
+            "score": str(score)
+        }
+print (data_S)
+response = requests.post("http://localhost:5000/send_data_score", json=data_S)
+
+print ("score " + str(score))

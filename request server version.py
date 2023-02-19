@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 
 createfile = input("this code needs to make two files on your computer one to hold passwords and profiles and one to save quizes that people uplaod this server can only be seen by you computer and no other computer is uses local host are you ok with this Y/N...")
 
@@ -41,7 +41,7 @@ def send_file():
     return contents
 
 
-@app.route("/send_data_score", methods=["POST"])
+'''@app.route("/send_data_score", methods=["POST"])
 def send_data():
     data = request.get_json()
     print (data)
@@ -49,7 +49,7 @@ def send_data():
     print(formatted_string)
     with open("scoretest.txt", "a") as f:
         f.write('\n' + formatted_string)
-    return "Data received", 200
+    return "Data received", 200'''
 
 #dose not work
 @app.route("/send_data_log_new_name", methods=["POST"])
@@ -87,6 +87,40 @@ def send_data_L():
                 print(value1)
                 return value1
     return "Not Found"
+
+@app.route("/send_data_score", methods=["POST"])
+def send_data_NL():
+    data_P_NL = request.get_json()
+    formatted_string = "{}: {}; {}^".format(data_P_NL['name'], data_P_NL['password'], data_P_NL['score'])
+    filename = "passwords.txt"
+    s = formatted_string
+    result = s.split('; ')[1].split('^')[0]
+    result1 = s.split('; ')[0]
+    search_string = result1
+    with open(filename, "r") as file:
+        for line in file:
+            if search_string in line:
+                parts = line.split(";")
+                value = parts[-1].strip()
+                parts = value.split("^")
+                value1 = parts[0].strip()                
+                oldlev = int(value1)
+                newlev = int(result)
+                newprint = oldlev + newlev
+                s = 'joe: 1234; 9^ yy'
+                start = s.index(';') + 2
+                end = s.index('^')
+                result = s[:start] + str(newprint) + s[end:]
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+    for i in range(len(lines)):
+        if result1 in lines[i]:
+            # Replace the line with the new line
+            lines[i] = result + "\n"
+    with open(filename, 'w') as file:
+        file.writelines(lines)      
+    response = make_response("Success", 200)
+    return response
 
 @app.route("/send_data_new_class", methods=["POST"])
 def send_data_C():
