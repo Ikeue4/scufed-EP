@@ -17,7 +17,7 @@ lev9 = ("[█████████░]")
 lev10 = ("[██████████]")
 
 while True:
-    WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nmake quiz\ndownload/play quiz  ")
+    WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nview class members\nmake quiz\ndownload/play quiz  ")
     if WhatToDo == ("profile"):
         data_N = {
             "name": name,
@@ -120,26 +120,11 @@ while True:
             parsed = ast.parse(code)
             exec(compile(parsed, "<string>", "exec"))
 
-name = "joe"
-password = "1234"
-whatquiz = "1+1"
-
-score = 0
-question_1 = "1+1"
-answer_1 = "2"
-print(question_1)
-user_answer_1 = input("Your answer: ")
-if user_answer_1 == answer_1:
-    print("Correct!")
-    score += 1
-else:
-    print("Incorrect. The correct answer is", answer_1)
-data_S = {
+    elif WhatToDo == ("view class members"):
+        data_VC = {
             "name": name,
-            "password": password,
-            "score": str(score)
+            "password": password
         }
-print (data_S)
-response = requests.post("http://localhost:5000/send_data_score", json=data_S)
-
-print ("score " + str(score))
+        response = requests.post("http://localhost:5000/send_data_view_class", json=data_VC)
+        poepleinclass = response.text
+        print ("\n-------------------------------\n" + "class\n-------------------------------\n" + poepleinclass)

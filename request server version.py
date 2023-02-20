@@ -107,7 +107,7 @@ def send_data_NL():
                 oldlev = int(value1)
                 newlev = int(result)
                 newprint = oldlev + newlev
-                s = 'joe: 1234; 9^ yy'
+                # = 'joe: 1234; 9^ yy'
                 start = s.index(';') + 2
                 end = s.index('^')
                 result = s[:start] + str(newprint) + s[end:]
@@ -177,12 +177,10 @@ def send_data_WQ():
     formatted_string = (formatted_string + ("^:"))
     print (formatted_string)
     filename = "quiz.txt"
-
     text = []
     with open(filename, "r") as file:
         for line in file:
             text.append(line)
-
     start_index = -1
     end_index = -1
     sendback_lines = []
@@ -198,6 +196,37 @@ def send_data_WQ():
                 start_index = -1
                 sendback = '\n'.join(sendback_lines)
     return sendback, 200
+
+@app.route("/send_data_view_class", methods=["POST"])
+def send_data_VC():
+    data_new_VC = request.get_json()
+    print(data_new_VC)
+    formatted_string = "{}: {}".format(data_new_VC['name'], data_new_VC['password'])
+    print(formatted_string)
+    filename = "passwords.txt"
+    text = []
+    with open(filename, "r") as file:
+        for line in file:
+            text.append(line)  
+    results = []
+    for line in text:
+        if formatted_string in line:
+            parts = line.split("^")
+            value = parts[1].strip()
+            print(value)
+    for line in text:
+        if value in line:
+            parts = line.split(":")
+            people = parts[0].strip()
+            s = line
+            start = s.index(';') + 1
+            end = s.index('^')
+            substring = s[start:end]
+            ret = people + ' ' + substring
+            results.append(ret)
+            print(ret)
+    
+    return ', '.join(results)
 
 if __name__ == "__main__":
     app.run()
