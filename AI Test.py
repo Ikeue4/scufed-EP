@@ -1,27 +1,56 @@
-import requests
+import subprocess
+import tkinter as tk
 
-print ('\n\nscore = 1\nquestion_1 = "1+1"\nanswer_1 = "2"\nprint(question_1)\nuser_answer_1 = input("Your answer: ")\nif user_answer_1 == answer_1:\n    print("Correct!")\nelse:\nscore += 1\n    print("Incorrect. The correct answer is", answer_1)\ndata_S = {\n            "name": name,\n            "password": password,\n            "score": str(score)\n        }\nprint (data_S)\nresponse = requests.post("http://localhost:5000/send_data_score", json=data_S)\nprint ("score " + str(score))')
+__name__ = '__main__'
 
-name = "joe"
-password = "1234"
-whatquiz = "1+1"
+class TerminalUI:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Python Terminal")
+        
+        self.input_box = tk.Entry(self.root, width=50)
+        self.input_box.pack(side=tk.LEFT, padx=10, pady=10)
+        
+        self.submit_button = tk.Button(self.root, text="Submit", command=self.submit_command)
+        self.submit_button.pack(side=tk.LEFT, padx=10, pady=10)
+        
+        self.output_box = tk.Text(self.root, width=50, height=10)
+        self.output_box.pack(side=tk.LEFT, padx=10, pady=10)
+        
+        self.process = None
+        
+    def run_script(self, script_path):
+        print("Running script: ", script_path)
+        self.process = subprocess.Popen(["python", script_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.read_stdout()
+        
+    def read_stdout(self):
+        while self.process and self.process.poll() is None:
+            output = self.process.stdout.readline()
+            if output:
+                self.output_box.insert(tk.END, output.decode())
+        self.stop_process()
+        
+    def stop_process(self):
+        if self.process:
+            self.process.kill()
+            self.process = None
+        
+    def submit_command(self):
+        command = self.input_box.get()
+        self.process.stdin.write((command + "\n").encode())
+        self.process.stdin.flush()
+        
+    def run(self):
+        self.root.mainloop()
 
-score = 0
-question_1 = "1+1"
-answer_1 = "2"
-print(question_1)
-user_answer_1 = input("Your answer: ")
-if user_answer_1 == answer_1:
-    print("Correct!")
-    score += 1
-else:
-    print("Incorrect. The correct answer is", answer_1)
-data_S = {
-            "name": name,
-            "password": password,
-            "score": str(score)
-        }
-print (data_S)
-response = requests.post("http://localhost:5000/send_data_score", json=data_S)
+print (__name__)
+if __name__ == '__main__':
+    try:
+        terminal_ui = TerminalUI()
+        script_path = "d:/source control/beta/auto quiz.py"
+        terminal_ui.run_script(script_path)
+        terminal_ui.run()
+    except Exception as e:
+        print("An error occurred:", e)
 
-print ("score " + str(score))

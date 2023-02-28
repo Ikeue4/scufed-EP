@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify, make_response
+import sys
+import random
+from flask_cors import CORS
+from datetime import datetime
 
 createfile = input("this code needs to make two files on your computer one to hold passwords and profiles and one to save quizes that people uplaod this server can only be seen by you computer and no other computer is uses local host are you ok with this Y/N...")
 
+if createfile == ("N"):
+    sys.exit()
+
 app = Flask(__name__)
-
-
+CORS(app)
 
 @app.route("/send_data_log", methods=["POST"])
 def send_data_P():
@@ -17,11 +23,11 @@ def send_data_P():
         contents = f.read()
     if name_to_check in contents:
         print("{} is present in {}".format(name_to_check, filename))
-        passwordvaild = True
-        return jsonify(passwordvaild), 200
+        passwordvaild = "succses"
+        return "succses", 200
     else:
         print("{} is not present in {}".format(name_to_check, filename))
-        passwordvaild = False
+        passwordvaild = "fail"
         return jsonify(passwordvaild), 300
     
 @app.route("/send_data_log_new", methods=["POST"])
@@ -29,8 +35,9 @@ def send_data_NA():
     data_P_New = request.get_json()
     formatted_string = "{}: {}".format(data_P_New['name'], data_P_New['password'])
     print(formatted_string)
+    random_number = random.randint(100, 1000)
     with open("passwords.txt", "a") as f:
-        f.write("\n" + formatted_string)
+        f.write("\n" + formatted_string + "; 0^ " + str(random_number))
     return "Data received and written to file", 200
 
 
@@ -107,7 +114,6 @@ def send_data_NL():
                 oldlev = int(value1)
                 newlev = int(result)
                 newprint = oldlev + newlev
-                # = 'joe: 1234; 9^ yy'
                 start = s.index(';') + 2
                 end = s.index('^')
                 result = s[:start] + str(newprint) + s[end:]
@@ -224,9 +230,40 @@ def send_data_VC():
             substring = s[start:end]
             ret = people + ' ' + substring
             results.append(ret)
-            print(ret)
+            print(results)
     
     return ', '.join(results)
+
+class TrafficLoggerMiddleware:
+    def __init__(self, app):
+        self.app = app
+        self.traffic_log = []
+
+    def __call__(self, environ, start_response):
+        with app.request_context(environ):
+            # Log the incoming request
+            self.traffic_log.append({
+                'method': request.method,
+                'url': request.url,
+                'body': request.get_data().decode('utf-8')
+            })
+
+        # Call the next middleware in the chain
+        return self.app(environ, start_response)
+
+# Attach the middleware to the Flask app
+app.wsgi_app = TrafficLoggerMiddleware(app.wsgi_app)
+
+# Define a route to view the traffic log
+@app.route('/traffic-log')
+def traffic_log():
+    return {'log': app.wsgi_app.traffic_log}
+
+@app.route('/time')
+def get_time():
+    current_time = datetime.now().strftime('%H:%M:%S')
+    response = app.make_response(current_time)
+    return response
 
 if __name__ == "__main__":
     app.run()

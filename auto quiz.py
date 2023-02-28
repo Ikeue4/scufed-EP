@@ -1,5 +1,8 @@
 import requests
 import ast
+import sys
+import time
+import threading
 
 name = ("joe")
 password = ("1234")
@@ -16,14 +19,16 @@ lev8 = ("[████████░░]")
 lev9 = ("[█████████░]")
 lev10 = ("[██████████]")
 
+
 while True:
-    WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nview class members\nmake quiz\ndownload/play quiz  ")
+    WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nview class members\nmake quiz\ndownload/play quiz\nquit\n")
     if WhatToDo == ("profile"):
         data_N = {
             "name": name,
             "password": password
         }
         response = requests.post("http://localhost:5000/send_data_level", json=data_N)
+
         level = response.text
         levelprogres = lev0
         if response.text == "1":
@@ -79,20 +84,17 @@ while True:
         wantstoseethecode = input("do you want to see the code?Y/N...")
         if wantstoseethecode == ("Y"):
             print("start of code\n-------------------------------\n" + output + ("\n\n-------------------------------\nend of code\n"))
-            runcode = input ("would you like to run this code?Y/N...")
         
-        else:
-            runcode = input ("would you like to run this code(the code will be run inside with ast or Abstract Syntax Trees witch provides a way to parse and analyze Python code in a more controlled and secure manner)?Y/N...")
+        runcode = input ("would you like to run this code(the code will be run inside with ast or Abstract Syntax Trees witch provides a way to parse and analyze Python code in a more controlled and secure manner)?Y/N...")
 
         if runcode == ("Y"):
             code = output
             parsed = ast.parse(code)
             exec(compile(parsed, "<string>", "exec"))
-            wanttoupload = input("do you want to uplaod you quiz?Y/N...")
-            whatisthename = input("what do you want the name of the quiz to be?...")
         
-        else:
-            wanttoupload = input("do you want to uplaod you quiz(you can only have one quiz on the cloud it will overwrite a old quiz)?Y/N...")
+        wanttoupload = input("do you want to uplaod you quiz?Y/N...")
+
+        if wanttoupload == ("Y"):
             whatisthename = input("what do you want the name of the quiz to be?...")
 
         if wanttoupload == ("Y"):
@@ -128,3 +130,6 @@ while True:
         response = requests.post("http://localhost:5000/send_data_view_class", json=data_VC)
         poepleinclass = response.text
         print ("\n-------------------------------\n" + "class\n-------------------------------\n" + poepleinclass)
+
+    elif WhatToDo == ("quit"):
+        sys.exit()

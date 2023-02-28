@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+          /* Define styles for the code block container */
+          .code-block-container {
+            position: relative; /* Add positioning context */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: auto;            
+            height: 100vh;
+          }
+          
+          /* Define styles for the code block */
+          pre {
+            position: relative; /* Add positioning context */
+            background-color: hsl(0, 0%, 23%);
+            border: 1px solid hsl(0, 0%, 33%);
+            border-radius: 10px; /* Add curved edges */
+            font-family: monospace;
+            font-size: 14px;
+            padding: 10px;
+            width: 50%; /* Set the width to 50% */
+            margin-top: -100px; /* Move it down by 50 pixels */
+            color: white; /* Set the text color to white */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+          }
+          
+          /* Define styles for the text in the corner */
+          .text-corner {
+            position: absolute; /* Add positioning context */
+            top: 10px; /* Add top padding */
+            left: 10px; /* Add left padding */
+            font-size: 27px;
+            color: white; /* Set the text color to white */
+            font-family: monospace;       
+          }
+        </style>
+      </head>
+  <body>
+    <div class="text-corner" id="text-corner">
+      ^-^
+    </div>
+    <div class="code-block-container">
+      <pre>
+        <code id="traffic">   this is resent traffic and this is the time it was last checked (the servers time)</code>
+        <code id="time"></code>
+        <code> see the source code at: </code>
+      </pre>
+    </div>
+    <script>
+      // Get the code-block element
+      const codeBlock = document.getElementById("traffic");
+      
+      // Split the code block into individual characters
+      const chars = codeBlock.innerHTML.split("");
+      
+      // Clear the code block
+      codeBlock.innerHTML = "";
+      
+      // Loop through each character and add a delay
+      chars.forEach((char, index) => {
+        setTimeout(() => {
+          // Append the current character to the code block
+          codeBlock.innerHTML += char;
+        }, index * 50); // Adjust the delay time as desired (in milliseconds)
+      });
+
+      // Get the text corner element
+      const textCorner = document.getElementById("text-corner");
+
+      // Define the text toggling function
+      function toggleText() {
+        if (textCorner.innerHTML === "x_x") {
+          textCorner.innerHTML = "^_^";
+        } else {
+          textCorner.innerHTML = "x_x";
+        }
+      }
+
+      // Call the toggleText function every 5 seconds
+      setInterval(() => {
+        toggleText();
+        setTimeout(() => {
+          toggleText();
+        }, 230); // Wait for 0.5 seconds before toggling back
+      }, 4000); // Repeat every 5 seconds
+    </script>
+    	<script>
+            fetch('http://127.0.0.1:5000/traffic-log')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('traffic').textContent = data;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
+      <script>
+          fetch('http://127.0.0.1:5000/time')
+            .then(response => response.text())
+            .then(data => {
+              document.getElementById('time').textContent = data;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        </script>
+  </body>
+  <head>
+    <style>
+      body {
+        background-color: rgb(46, 46, 46);
+      }
+    </style>
+  </head>
+</html>

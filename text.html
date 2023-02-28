@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+          /* Define styles for the code block container */
+          .code-block-container {
+            position: relative; /* Add positioning context */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow-x: auto;            
+          }
+          
+          /* Define styles for the code block */
+          pre {
+            position: relative; /* Add positioning context */
+            background-color: hsl(0, 0%, 23%);
+            border: 1px solid hsl(0, 0%, 33%);
+            border-radius: 10px; /* Add curved edges */
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 10px;
+            width: 50%; /* Set the width to 50% */
+            margin-top: -100px; /* Move it up by 100 pixels */
+            color: white; /* Set the text color to white */
+          }
+          
+          /* Define styles for the text in the corner */
+          .text-corner {
+            position: absolute; /* Add positioning context */
+            top: 10px; /* Add top padding */
+            left: 10px; /* Add left padding */
+            font-size: 27px;
+            color: white; /* Set the text color to white */
+            font-family: monospace;       
+          }
+
+          body {
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .sidebar {
+                    position: fixed;
+                    width: 200px;
+                    height: 100%;
+                    font-size: 27px;                    
+                    background: #333;
+                    color: #fff;
+                    padding: 35px;
+                    font-family: monospace;                    
+                }
+
+                .sidebar a {
+                    display: block;
+                    color: #fff;
+                    font-size: 27px;                    
+                    padding: 20px;
+                    text-decoration: none;
+                    font-family: monospace;                    
+                }
+
+                .main {
+                    margin-left: 200px;
+                    padding: 10px;
+                    font-size: 20px;                   
+                    font-family: monospace;                    
+                }
+        </style>
+        	<title>Server stat</title>
+            <link rel="stylesheet" type="text/css" href="style.css">
+      </head>
+  <body>
+    <div class="sidebar">
+		<a href="file:///D:/source%20control/beta/text.html#">Home</a>
+		<a href="#">About</a>
+		<a href="#">Contact</a>
+	</div>
+    <div class="text-corner" id="text-corner">
+      ^-^
+    </div>
+    <div class="code-block-container">
+      <pre>
+        <code id="code-block">
+          /* Your code goes here */
+          body {
+            background-color: black;
+          }
+        </code>
+      </pre>
+    </div>
+    <script>
+      // Get the code block element
+      const codeBlock = document.getElementById("code-block");
+      
+      // Split the code block into individual characters
+      const chars = codeBlock.innerHTML.split("");
+      
+      // Clear the code block
+      codeBlock.innerHTML = "";
+      
+      // Loop through each character and add a delay
+      chars.forEach((char, index) => {
+        setTimeout(() => {
+          // Append the current character to the code block
+          codeBlock.innerHTML += char;
+        }, index * 50); // Adjust the delay time as desired (in milliseconds)
+      });
+
+      // Get the text corner element
+      const textCorner = document.getElementById("text-corner");
+
+      // Define the text toggling function
+      function toggleText() {
+        if (textCorner.innerHTML === "x_x") {
+          textCorner.innerHTML = "^_^";
+        } else {
+          textCorner.innerHTML = "x_x";
+        }
+      }
+
+      // Call the toggleText function every 5 seconds
+      setInterval(() => {
+        toggleText();
+        setTimeout(() => {
+          toggleText();
+        }, 230); // Wait for 0.5 seconds before toggling back
+      }, 4000); // Repeat every 5 seconds
+    </script>
+    <script type="text/javascript" src="D:\source control\beta\script.js"></script>
+  </body>
+  <head>
+    <style>
+      body {
+        background-color: rgb(46, 46, 46);
+      }
+    </style>
+  </head>
+</html>
