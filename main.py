@@ -6,6 +6,8 @@ import time
 #checks to see if they are new or not
 #problem you only need one charater in a paswerd
 
+print("^_^")
+
 while True:
     hasacc = input("Do you have an account Y/N? ")
     if hasacc.upper() == "Y":

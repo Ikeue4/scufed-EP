@@ -4,10 +4,16 @@ import random
 from flask_cors import CORS
 from datetime import datetime
 
-createfile = input("this code needs to make two files on your computer one to hold passwords and profiles and one to save quizes that people uplaod this server can only be seen by you computer and no other computer is uses local host are you ok with this Y/N...")
+print("^_^")
 
-if createfile == ("N"):
-    sys.exit()
+while True:
+    createfile = input("This code needs to make two files on your computer: one to hold passwords and profiles, and one to save quizzes that people upload. This server can only be accessed from your computer and cannot be seen by other computers. Do you want to proceed? (Y/N)")
+    if createfile.lower() == "n":
+        sys.exit()
+    elif createfile.lower() == "y":
+        break
+    else:
+        print("Invalid input. Please enter Y or N.")
 
 app = Flask(__name__)
 CORS(app)
@@ -46,37 +52,6 @@ def send_file():
     with open("scoretest.txt", "r") as f:
         contents = f.read()
     return contents
-
-
-'''@app.route("/send_data_score", methods=["POST"])
-def send_data():
-    data = request.get_json()
-    print (data)
-    formatted_string = "{}: {}".format(data['name'], data['score'])
-    print(formatted_string)
-    with open("scoretest.txt", "a") as f:
-        f.write('\n' + formatted_string)
-    return "Data received", 200'''
-
-#dose not work
-@app.route("/send_data_log_new_name", methods=["POST"])
-def send_data_NN():
-    data_P_New_N = request.get_json()
-    print (data_P_New_N)
-    formatted_string1 = "{}:".format(data_P_New_N.get("name", "not found"))
-    print (formatted_string1)
-    formatted_string2 = "{}:".format(data_P_New_N.get("oldname", "not found"))
-    print (formatted_string2)
-    filename = "passwords.txt"
-    with open(filename, "r") as file:
-        content = file.read()
-
-    content = content.replace(formatted_string1, formatted_string2)
-    print(content)
-
-    with open(filename, "w") as file:
-        file.write(content)
-    return "Data received and written to file", 200
 
 @app.route("/send_data_level", methods=["POST"])
 def send_data_L():

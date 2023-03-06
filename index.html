@@ -1,20 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Server Status</title>
+	<title>Button Text Example</title>
+	<style>
+		
+		ul {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 270px;
+            height: 100%;
+            background-color: hsl(0, 0%, 20%);
+		}
+
+		li a {
+            display: block;
+            width: 100%;
+            padding: 40px;
+            border: none;
+            background-color: transparent;
+            color: white;
+            font-size: 27px;
+            text-align: left;
+            cursor: pointer;
+            font-family: monospace;   
+		}
+
+		li a.active {
+			background-color: #4CAF50;
+			color: white;
+		}
+
+		li a:hover:not(.active) {
+			background-color: #555;
+			color: white;
+		}
+		
+		#content {
+			margin-left: 200px;
+			padding: 20px;
+		}
+	</style>
 </head>
 <body>
-	<h1>Time is: <span id="time"></span></h1>
-	
+	<ul>
+		<li><a class="active" href="#" onclick="showText('Button 1 content')">Button 1</a></li>
+		<li><a href="#" onclick="showText('Button 2 content')">Button 2</a></li>
+		<li><a href="#" onclick="showText('Button 3 content')">Button 3</a></li>
+	</ul>
+	<div id="content">
+		<h2>Content goes here</h2>
+		<p>Select a button to see its content.</p>
+	</div>
 	<script>
-		fetch('http://127.0.0.1:5000/traffic-log')
-			.then(response => response.text())
-			.then(data => {
-				document.getElementById('time').textContent = data;
-			})
-			.catch(error => {
-				console.error(error);
-			});
+		function showText(text) {
+			document.getElementById("content").innerHTML = "<h2>Button content</h2><p>" + text + "</p>";
+		}
 	</script>
 </body>
 </html>

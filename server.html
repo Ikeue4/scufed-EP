@@ -37,22 +37,82 @@
             color: white; /* Set the text color to white */
             font-family: monospace;       
           }
+
+          #button1 {
+            position: absolute;
+            background-color: hsl(0, 0%, 20%);
+            border: 0px solid hsl(0, 0%, 33%);
+            top: 60px;
+            left: 10px;
+            font-size: 30px;
+            font-family: monospace;
+            padding: 40px;
+            color: white; /* Set the text color to white */
+          }
+
+          #button2 {
+            position: absolute;
+            background-color: hsl(0, 0%, 20%);
+            border: 0px solid hsl(0, 0%, 33%);
+            top: 180px;
+            left: 10px;
+            font-size: 30px;
+            font-family: monospace;
+            padding: 40px;
+            color: white; /* Set the text color to white */
+          }
+
+          #button3 {
+            position: absolute;
+            background-color: hsl(0, 0%, 20%);
+            border: 0px solid hsl(0, 0%, 33%);
+            top: 310px;
+            left: 10px;
+            font-size: 30px;
+            font-family: monospace;
+            padding: 40px;
+            color: white; /* Set the text color to white */
+          }
+          
+          /* Define styles for the sidebar */
+          .sidebar {
+            position: fixed; /* Add positioning context */
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background-color: hsl(0, 0%, 20%);
+            color: white;
+            padding: 20px;
+          }
+          
+          body {
+            overflow: hidden;
+          }
         </style>
       </head>
   <body>
+    <div class="sidebar">
+    </div>
     <div class="text-corner" id="text-corner">
       ^-^
     </div>
     <div class="code-block-container">
       <pre>
-        <code id="traffic">   this is resent traffic and this is the time it was last checked (the servers time)</code>
-        <code id="time"></code>
-        <code> see the source code at: </code>
+        <code id="type">
+          Scuffed ep is one of the best leaning tools having over 300 negative reveiws. 
+          So what are you doing go to the Download tabe and make a account today!
+          &larr; &larr; &larr; &larr; &larr;
+        </code>
       </pre>
     </div>
+    <button id="button1" onclick="changeText()">Home</button>
+    <button id="button2" onclick="changeText2()">Traffic</button>
+    <button id="button3" onclick="changeText3()">Download</button>
+
     <script>
       // Get the code-block element
-      const codeBlock = document.getElementById("traffic");
+      const codeBlock = document.getElementById("type");
       
       // Split the code block into individual characters
       const chars = codeBlock.innerHTML.split("");
@@ -65,7 +125,7 @@
         setTimeout(() => {
           // Append the current character to the code block
           codeBlock.innerHTML += char;
-        }, index * 50); // Adjust the delay time as desired (in milliseconds)
+        }, index * 25); // Adjust the delay time as desired (in milliseconds)
       });
 
       // Get the text corner element
@@ -108,6 +168,49 @@
               console.error(error);
             });
         </script>
+      <script>
+        function changeText() {
+          const codeBlock = document.getElementById("type");
+          const newText = "Scuffed ep is one of the best leaning tools having over 300 negative reveiws. \n        So what are you doing go to the Download tabe and make a account today!";
+          const chars = newText.split("");
+          codeBlock.innerHTML = "";
+          chars.forEach((char, index) => {
+            setTimeout(() => {
+              codeBlock.innerHTML += char;
+            }, index * 25); // Adjust the delay time as desired (in milliseconds)
+          });
+        }
+      </script>
+    <script>
+      function changeText2() {
+        const codeBlock = document.getElementById("type");
+        fetch("http://127.0.0.1:5000/traffic-log") 
+          .then(response => response.text())
+          .then(text => {
+            const chars = text.split("");
+            codeBlock.innerHTML = "\n";
+            chars.forEach((char, index) => {
+              setTimeout(() => {
+                codeBlock.innerHTML += char;
+              }, index * 25); // Adjust the delay time as desired (in milliseconds)
+            });
+          })
+          .catch(error => console.error(error));
+      }
+    </script>
+    <script>
+        function changeText3() {
+          const codeBlock = document.getElementById("type");
+          const newText = "\n 1) download github desktop\n 2) open a code editor such as VS code (don't know if it works in other code editors)\n 3) click the file button and open a empty folder\n 4) now open the console and type git clone https://github.com/Ikeue4/scufed-EP.git \n 5) run the main python code and the request server version";
+          const chars = newText.split("");
+          codeBlock.innerHTML = "";
+          chars.forEach((char, index) => {
+            setTimeout(() => {
+              codeBlock.innerHTML += char;
+            }, index * 25); // Adjust the delay time as desired (in milliseconds)
+          });
+        }
+      </script>
   </body>
   <head>
     <style>
@@ -117,3 +220,4 @@
     </style>
   </head>
 </html>
+
