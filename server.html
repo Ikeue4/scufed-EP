@@ -2,6 +2,11 @@
 <html>
     <head>
         <style>
+
+          body {
+            background-color: rgb(46, 46, 46);
+          }
+
           /* Define styles for the code block container */
           .code-block-container {
             position: relative; /* Add positioning context */
@@ -148,26 +153,6 @@
         }, 230); // Wait for 0.5 seconds before toggling back
       }, 4000); // Repeat every 5 seconds
     </script>
-    	<script>
-            fetch('http://127.0.0.1:5000/traffic-log')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('traffic').textContent = data;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        </script>
-      <script>
-          fetch('http://127.0.0.1:5000/time')
-            .then(response => response.text())
-            .then(data => {
-              document.getElementById('time').textContent = data;
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        </script>
       <script>
         function changeText() {
           const codeBlock = document.getElementById("type");
@@ -184,7 +169,7 @@
     <script>
       function changeText2() {
         const codeBlock = document.getElementById("type");
-        fetch("http://127.0.0.1:5000/traffic-log") 
+        fetch("http://127.0.0.1:5000/ping") 
           .then(response => response.text())
           .then(text => {
             const chars = text.split("");
@@ -212,12 +197,4 @@
         }
       </script>
   </body>
-  <head>
-    <style>
-      body {
-        background-color: rgb(46, 46, 46);
-      }
-    </style>
-  </head>
 </html>
-

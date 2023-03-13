@@ -1,10 +1,34 @@
-import requests
-import ast
-import sys
-import time
+try:
+    import requests
+    print ("\033[32mrequests installed ✔\033[0m")
+except ImportError:
+    print("\033[The requests library is not installed ✘\033[0m")
+
+try:
+    import ast
+    print ("\033[32mast installed ✔\033[0m")
+except ImportError:
+    print("\033[The ast library is not installed ✘\033[0m")
+
+try:
+    import sys
+    print ("\033[32msys installed ✔\033[0m")
+except ImportError:
+    print("\033[The sys library is not installed ✘\033[0m")
+
+try:
+    import time
+    print ("\033[32mtime installed ✔\033[0m")
+except ImportError:
+    print("\033[The time library is not installed ✘\033[0m")
 
 #checks to see if they are new or not
 #problem you only need one charater in a paswerd
+
+response = requests.get("http://localhost:5000/ping")
+server = response.text
+print("\033[32m" + server, "\033[32m✔\033[0m")
+
 
 print("^_^")
 
@@ -65,7 +89,7 @@ if password_validation_status == ("succses"):
 
 
     while True:
-        WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nview class members\nmake quiz\ndownload/play quiz\nquit\n")
+        WhatToDo = input("-------------------------------\nUSER OPTIONS\n-------------------------------\nprofile\njoin class\nview class members\nmake quiz\ndownload/play quiz\nquit\nchat\n")
         if WhatToDo == ("profile"):
             data_N = {
                 "name": name,
@@ -140,8 +164,6 @@ if password_validation_status == ("succses"):
 
             if wanttoupload == ("Y"):
                 whatisthename = input("what do you want the name of the quiz to be?...")
-
-            if wanttoupload == ("Y"):
                 data_Q = {
                     "name":"#" + whatisthename + "^",
                     "code": output
@@ -177,6 +199,47 @@ if password_validation_status == ("succses"):
 
         elif WhatToDo == ("quit"):
             sys.exit()
+        
+        elif WhatToDo == ("chat"):
+            data_CH = {
+                "name": name,
+                "password": password
+            }
+            response = requests.post("http://localhost:5000/class_chat_open", json=data_CH)
+            printstat = response.text
+            print ("you are in class", printstat)
+            URL = "http://localhost:5000/" + printstat
+            print (URL)
+            URL2 = URL + "r"
+            retur = "joined"
+            data_CHN = {
+                "user": name,
+                "mess": retur
+            }
+            txt = ""
+            while True:
+                print("\n-------------------------------" + txt + "\nto exit type 1 2 to refresh" + "\n-------------------------------")
+                retur = input("")
+                if retur == "1":
+                    data_CHD = {
+                        "name": name,
+                        "password": password
+                    }
+                    response = requests.post("http://localhost:5000/class_chat_close", json=data_CHD)
+                    break
+                elif retur == "2":
+                    response = requests.get(URL2)
+                    txt = response.text
+                else:
+                    data_CHN = {
+                        "user": name,
+                        "mess": retur
+                    }
+                    response = requests.post(URL, json=data_CHN)
+                    txt = response.text
+                    
+
+
 
 else:
     sys.exit()

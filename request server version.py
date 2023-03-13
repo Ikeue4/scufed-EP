@@ -1,8 +1,26 @@
-from flask import Flask, request, jsonify, make_response
-import sys
-import random
-from flask_cors import CORS
-from datetime import datetime
+try:
+    from flask import Flask, request, jsonify, make_response
+    print ("flask installed ✔")
+except ImportError:
+    print("The flask library is not installed ✘")
+
+try:
+    import sys
+    print ("sys installed ✔")
+except ImportError:
+    print("The sys library is not installed ✘")
+
+try:
+    import random
+    print ("random installed ✔")
+except ImportError:
+    print("The random library is not installed ✘")
+
+try:
+    from flask_cors import CORS
+    print ("flask_cors installed ✔")
+except ImportError:
+    print("The flask_cors library is not installed ✘")
 
 print("^_^")
 
@@ -14,6 +32,16 @@ while True:
         break
     else:
         print("Invalid input. Please enter Y or N.")
+
+CS_1 = 0
+CS_2 = 0
+CS_3 = 0
+CS1class = ""
+CS2class = ""
+CS3class = ""
+chats1 = ""
+chats2 = ""
+chats3 = ""
 
 app = Flask(__name__)
 CORS(app)
@@ -206,39 +234,177 @@ def send_data_VC():
             ret = people + ' ' + substring
             results.append(ret)
             print(results)
-    
     return ', '.join(results)
 
-class TrafficLoggerMiddleware:
-    def __init__(self, app):
-        self.app = app
-        self.traffic_log = []
+@app.route("/class_chat_open", methods=["POST"])
+def send_data_CO():
+    global CS_1
+    global CS_2
+    global CS_3
+    global CS1class
+    global CS2class
+    global CS3class
+    data_new_CH = request.get_json()
+    print(data_new_CH)
+    formatted_string = "{}: {}".format(data_new_CH['name'], data_new_CH['password'])
+    print(formatted_string)
+    filename = "passwords.txt"
+    text = []
+    with open(filename, "r") as file:
+        for line in file:
+            text.append(line)  
+    results = []
+    for line in text:
+        if formatted_string in line:
+            parts = line.split("^")
+            value = parts[1].strip()
+            value
+            print(value)
+    if CS_1 == 0:
+        CS1class = value
+        CS_1 = CS_1 + 1
+        print(CS_1)
+        return "CS_1"
+    elif CS1class == value:
+        CS_1 = CS_1 + 1
+        print(CS_1)
+        return "CS_1"
+    elif CS_2 == 0:
+        CS2class = value
+        CS_2 = CS_2 + 1
+        print(CS_2)
+        return "CS_2"
+    elif CS2class == value:
+        CS_2 = CS_2 + 1
+        print(CS_2)
+        return "CS_2"        
+    elif CS_3 == 0:
+        CS3class = value
+        CS_3 = CS_3 + 1
+        print(CS_3)
+        return "CS_3"
+    elif CS3class == value:
+        CS_3 = CS_3 + 1
+        print(CS_3)
+        return "CS_3"
+    else:
+        return "servers full pleses wait"
 
-    def __call__(self, environ, start_response):
-        with app.request_context(environ):
-            # Log the incoming request
-            self.traffic_log.append({
-                'method': request.method,
-                'url': request.url,
-                'body': request.get_data().decode('utf-8')
-            })
+@app.route("/CS_1", methods=["POST"])
+def send_data_CS1():
+    global CS_1
+    global chats1
+    if CS_1 == 0:
+        chats1 = ""
+    else:
+        data_new_chat = request.get_json()
+        print (data_new_chat)
+        formatted_string = "{}: {}".format(data_new_chat['user'], data_new_chat['mess'])
+        print(formatted_string)
+        global CS1class
+        chats1 = chats1 + "\n" + formatted_string
+        print (chats1)
+        return chats1
 
-        # Call the next middleware in the chain
-        return self.app(environ, start_response)
+@app.route("/CS_1r", methods=["GET"])
+def send_data_CS1r():
+    global chats1
+    return chats1
 
-# Attach the middleware to the Flask app
-app.wsgi_app = TrafficLoggerMiddleware(app.wsgi_app)
+@app.route("/CS_2", methods=["POST"])
+def send_data_CS2():
+    global CS_2
+    global chats2
+    if CS_2 == 0:
+        chats2 = ""
+    else:
+        data_new_chat = request.get_json()
+        print (data_new_chat)
+        formatted_string = "{}: {}".format(data_new_chat['user'], data_new_chat['mess'])
+        print(formatted_string)
+        global CS1class
+        chats2 = chats2 + "\n" + formatted_string
+        print (chats2)
+        return chats2
 
-# Define a route to view the traffic log
-@app.route('/traffic-log')
-def traffic_log():
-    return {'log': app.wsgi_app.traffic_log}
+@app.route("/CS_2r", methods=["GET"])
+def send_data_CS2r():
+    global chats2
+    return chats2
 
-@app.route('/time')
-def get_time():
-    current_time = datetime.now().strftime('%H:%M:%S')
-    response = app.make_response(current_time)
-    return response
+@app.route("/CS_3", methods=["POST"])
+def send_data_CS3():
+    global CS_3
+    global chats3
+    if CS_3 == 0:
+        chats3 = ""
+    else:
+        data_new_chat = request.get_json()
+        print (data_new_chat)
+        formatted_string = "{}: {}".format(data_new_chat['user'], data_new_chat['mess'])
+        print(formatted_string)
+        global CS1class
+        chats3 = chats3 + "\n" + formatted_string
+        print (chats3)
+        return chats3
+
+@app.route("/CS_3r", methods=["GET"])
+def send_data_CS3r():
+    global chats3
+    return chats3
+
+@app.route("/class_chat_close", methods=["POST"])
+def send_data_COD():
+    global CS_1
+    global CS_2
+    global CS_3
+    global CS1class
+    global CS2class
+    global CS3class
+    global chats1
+    global chats2
+    global chats3
+    data_new_CH = request.get_json()
+    print(data_new_CH)
+    formatted_string = "{}: {}".format(data_new_CH['name'], data_new_CH['password'])
+    print(formatted_string)
+    filename = "passwords.txt"
+    text = []
+    with open(filename, "r") as file:
+        for line in file:
+            text.append(line)  
+    results = []
+    for line in text:
+        if formatted_string in line:
+            parts = line.split("^")
+            value = parts[1].strip()
+            value
+            print(value)
+    if CS1class == value:
+        CS_1 = CS_1 - 1
+        print(CS_1)
+        if CS_1 == 0:
+            chats1 = ""
+        return "bye" 
+    elif CS2class == value:
+        CS_2 = CS_2 - 1
+        print(CS_2)
+        if CS_1 == 0:
+            chats1 = ""
+        return "bye"       
+    elif CS3class == value:
+        CS_3 = CS_3 - 1
+        print(CS_3)
+        if CS_1 == 0:
+            chats1 = ""
+        return "bye"
+    else:
+        return "something went wrong"
+    
+@app.route("/ping", methods=["GET"])
+def ping():
+    ping = "!server up! running on http://127.0.0.1:5000"
+    return ping, 200
 
 if __name__ == "__main__":
     app.run()
